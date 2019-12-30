@@ -31,6 +31,7 @@
                 <li><a href='#'>Giảng đường trực tuyến</a></li>
                 <li><a href='diem.php'>Tra cứu điểm</a></li>
                 <li><a href='#'>Tra cứu học phí</a></li>
+                <li><a href='doimatkhau.php'>Đổi mật khẩu</a></li>
             </ul>
         </div>
     </BODY> 

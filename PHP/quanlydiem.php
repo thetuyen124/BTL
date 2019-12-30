@@ -9,18 +9,38 @@ $con = mysqli_connect($servername,$username,$password,$dbname);
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(isset($_POST["masv"])) { $title = $_POST['masv']; }
-    if(isset($_POST["mamon"])) { $date = $_POST['mamon']; }
-    if(isset($_POST["dqt"])) { $description = $_POST['dqt']; }
-    if(isset($_POST["dt"])) { $content = $_POST['dt']; }
-    
-    
-    $sql = "asdasd";
+    if(isset($_POST["masv"])) { $msv = $_POST['masv']; }
+    if(isset($_POST["mamon"])) { $mamon = $_POST['mamon']; }
+    if(isset($_POST["dqt"])) { $dqt =(float) $_POST['dqt']; }
+    if(isset($_POST["dt"])) { $dt =(float) $_POST['dt']; }
+    $tkhp=0.4*$dqt+0.6*$dt;
+    $danhgia="DAT";
+    if($tkhp>8.5){
+        $diemchu="A";
+    }
+    else{
+        if($tkhp>7){
+            $diemchu="B";
+        }
+        else{
+            if($tkhp>5.5){
+                $diemchu="C";
+            }
+            else{
+                if($tkhp>4){
+                    $diemchu="D";
+                }
+                else{
+                    $diemchu="f";
+                    $danhgia="CHUADAT";
+                }
+            }
+        }
+    }
+    $sql = "insert into ddiem(msv,mamon,solanthi,diemqt,diemthi,tkhp,diemchu,danhgia) values('".$msv."','".$mamon."',1,".$dqt.",".$dt.",".$tkhp.",'".$diemchu."','".$danhgia."')on duplicate key update diemqt=".$dqt.",diemthi=".$dt.",solanthi=solanthi+1,tkhp=".$tkhp.",diemchu='".$diemchu."',danhgia='".$danhgia."'" ;
 
-    if (mysqli_query($con, $sql)) {
-        echo "Thêm dữ liệu thành công";
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+    if (!mysqli_query($con, $sql)) {
+        echo "<script type='text/javascript'>alert('Lỗi không xác định');</script>";
     }
 }
 ?>
@@ -85,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <th>Số tín chỉ</th>
                     <th>Kỳ học</th>
                     <th>Đánh giá</th>
+                    <th>Số lần thi </th>
                     <th>Mã sinh viên</th>
                     <th>Quá trình</th>
                     <th>Thi</th>
@@ -94,16 +115,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </thread>
             <tbody>
                 <?php
-                    $query1="select *from diem where msv='".$_SESSION['masinhvien']."'";
+                    $query1="select *from ddiem";
                     $run=mysqli_query($con,$query1);
                     $i=1;
                     while ($diem=mysqli_fetch_array($run) ){
-                        $query2="select mamon,tenmon,sotinchi,kyhoc from monhoc where mamonhoc=".$diem['mamon'];
+                        $query2="select * from monhoc where mamon = '".$diem['mamon']."'";
                         $run2=mysqli_query($con,$query2);
                         $mon=mysqli_fetch_array($run2);
-                        $query3="select *from sinhvien where msv=".$diem['msv'];
-                        $run3=mysqli_query($con,$query3);
-                        $sinhvien=mysqli_fetch_array($run3);
                 ?>
                     <tr>
                         <td> <?php echo $i ?> </td>
@@ -112,7 +130,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td> <?php echo $mon['sotinchi'] ?> </td>
                         <td> <?php echo $mon['kyhoc'] ?> </td>
                         <td> <?php echo $diem['danhgia'] ?> </td>
-                        <td> <?php echo $sinhvien['msv'] ?> </td>
+                        <td> <?php echo $diem['solanthi'] ?> </td>
+                        <td> <?php echo $diem['msv'] ?> </td>
                         <td> <?php echo $diem['diemqt'] ?> </td>
                         <td> <?php echo $diem['diemthi'] ?> </td>
                         <td> <?php echo $diem['tkhp'] ?> </td>

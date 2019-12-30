@@ -68,36 +68,26 @@
         <table align="center" style="width: 80%;line-height: 35px;">
             <tr>
                 <td class="field" style="width: 12.2%;">Chọn học kỳ:</td>
-                <td>
-                    <div class="dropdown" style="width: 52.812489px;">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Kỳ học
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <?php
-                                $query1="select distinct kyhoc from monhoc where mamon in ( select mamon from diem where msv ='".$_SESSION['masinhvien']."') ORDER by kyhoc ASC ";
-                                $run=mysqli_query($con,$query1);
-                                $i=1;
-                                while ($ky=mysqli_fetch_array($run) ){
-                            ?>
-                            <li><a onclick="chonky($i)"><?php echo $ky['kyhoc'] ?></a></li>
-                            <?php  
-                                $i++;
-                                }
-                            ?>
-                        </ul>
-                    </div>
+                <td style="width: 15.25%;">
+                    <select name="ky">
+                    <option>---</option>
+                    <?php
+                        $query1="select distinct kyhoc from monhoc where mamon in ( select mamon from ddiem where msv ='".$_SESSION['masinhvien']."') ORDER by kyhoc ASC ";
+                        $run=mysqli_query($con,$query1);
+                        $i=1;
+                        while ($ky=mysqli_fetch_array($run) ){
+                    ?>
+                    <option><?php echo $ky['kyhoc'] ?></option>
+                    <?php }?>
+                    </select>
                 </td>
-                <td class="field">Lọc</td>
+                <td class="field" style="width: 11.25%;">Lọc</td>
                 <td>
-                    <div class="dropdown" style="width: 228px;">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Lọc
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                          <li><a onclick= "chonloc(1)">Hiển thị tất cả học phần có điểm</a></li>
-                          <li><a onclick= "chonloc(2)">Hiển thị những môn đã đạt</a></li>
-                          <li><a onclick= "chonloc(3)">Hiển thị những môn chưa đạt</a></li>
-                        </ul>
-                    </div>
+                    <select name="loc">
+                        <option>Hiển thị tất cả học phần có điểm</option>
+                        <option>Hiển thị những môn đã đạt</option>
+                        <option>Hiển thị những môn chưa đạt</option>
+                    </select>
                 </td>
             </tr>
         </table>
@@ -120,16 +110,13 @@
             </thread>
             <tbody>
                 <?php
-                    $query1="select *from diem where msv='".$_SESSION['masinhvien']."'";
+                    $query1="select *from ddiem where msv='".$_SESSION['masinhvien']."'";
                     $run=mysqli_query($con,$query1);
                     $i=1;
                     while ($diem=mysqli_fetch_array($run) ){
-                        $query2="select mamon,tenmon,sotinchi,kyhoc from monhoc where mamonhoc=".$diem['mamon'];
+                        $query2="select * from monhoc where mamon='".$diem['mamon']."'";
                         $run2=mysqli_query($con,$query2);
                         $mon=mysqli_fetch_array($run2);
-                        $query3="select *from sinhvien where msv=".$diem['msv'];
-                        $run3=mysqli_query($con,$query3);
-                        $sinhvien=mysqli_fetch_array($run3);
                 ?>
                     <tr>
                         <td> <?php echo $i ?> </td>
@@ -138,7 +125,7 @@
                         <td> <?php echo $mon['sotinchi'] ?> </td>
                         <td> <?php echo $mon['kyhoc'] ?> </td>
                         <td> <?php echo $diem['danhgia'] ?> </td>
-                        <td> <?php echo $sinhvien['msv'] ?> </td>
+                        <td> <?php echo $diem['msv'] ?> </td>
                         <td> <?php echo $diem['diemqt'] ?> </td>
                         <td> <?php echo $diem['diemthi'] ?> </td>
                         <td> <?php echo $diem['tkhp'] ?> </td>
