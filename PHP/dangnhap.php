@@ -25,7 +25,6 @@ if (isset($_POST['dangnhap']))
             <p>Mật khẩu : <input type="password" id="pass" name="textpw" value="" size="30" /></p>
             <p>
                 <input type="submit" name="dangnhap" value="Đăng nhập" />
-                <a style="left: 5px;" href = "/BTL/php/qenmk.html" target = "_self">[Quên mật khẩu]</a>
             </p>
         </form>
     </BODY> 
