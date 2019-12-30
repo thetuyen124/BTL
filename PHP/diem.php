@@ -73,14 +73,17 @@
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Kỳ học
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a onclick="chonky(1)">Kỳ 1</a></li>
-                            <li><a onclick="chonky(2)">Kỳ 2</a></li>
-                            <li><a onclick="chonky(3)">Kỳ 3</a></li>
-                            <li><a onclick="chonky(4)">Kỳ 4</a></li>
-                            <li><a onclick="chonky(5)">Kỳ 5</a></li>
-                            <li><a onclick="chonky(6)">Kỳ 6</a></li>
-                            <li><a onclick="chonky(7)">Kỳ 7</a></li>
-                            <li><a onclick="chonky(8)">Kỳ 8</a></li>
+                            <?php
+                                $query1="select distinct kyhoc from monhoc where mamon in ( select mamon from diem where msv ='".$_SESSION['masinhvien']."') ORDER by kyhoc ASC ";
+                                $run=mysqli_query($con,$query1);
+                                $i=1;
+                                while ($ky=mysqli_fetch_array($run) ){
+                            ?>
+                            <li><a onclick="chonky($i)"><?php echo $ky['kyhoc'] ?></a></li>
+                            <?php  
+                                $i++;
+                                }
+                            ?>
                         </ul>
                     </div>
                 </td>
@@ -117,15 +120,14 @@
             </thread>
             <tbody>
                 <?php
-                    $query1="select *from diem where fksv='".$_SESSION['idsv']."'";
+                    $query1="select *from diem where msv='".$_SESSION['masinhvien']."'";
                     $run=mysqli_query($con,$query1);
-                    $n=mysqli_num_rows($run);
                     $i=1;
                     while ($diem=mysqli_fetch_array($run) ){
-                        $query2="select mamon,tenmon,sotinchi,kyhoc from monhoc where idmonhoc=".$diem['fkmon'];
+                        $query2="select mamon,tenmon,sotinchi,kyhoc from monhoc where mamonhoc=".$diem['mamon'];
                         $run2=mysqli_query($con,$query2);
                         $mon=mysqli_fetch_array($run2);
-                        $query3="select *from sinhvien where idsv=".$diem['fksv'];
+                        $query3="select *from sinhvien where msv=".$diem['msv'];
                         $run3=mysqli_query($con,$query3);
                         $sinhvien=mysqli_fetch_array($run3);
                 ?>

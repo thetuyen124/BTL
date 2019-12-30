@@ -13,7 +13,7 @@ $pass = addslashes($_POST['textpw']);
 if($user==""||$pass=="")
     echo "<script type='text/javascript'>alert('Vui lòng nhập đầy đủ tài khoản mật khẩu.');</script>";
 else{
-    $query ="SELECT msv, matkhau FROM sinhvien where msv='".$_POST['textus']."'";
+    $query ="SELECT msv, matkhau FROM sinhvien where msv='".$user."'";
     $retval = mysqli_query($con,$query);
     if (mysqli_num_rows($retval) == 0) {
         echo "<script type='text/javascript'>alert('Tên đăng nhập không tồn tại.');</script>";
